@@ -16,6 +16,12 @@
          <ImageView fx:id="imageView" fitHeight="442.0" fitWidth="710.0" pickOnBounds="true" preserveRatio="true" />
       </children>
    </HBox>
+   <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0">
+      <children>
+         <TextField fx:id="dateField" editable="false" prefHeight="25.0" prefWidth="200.0" />
+         <TextField fx:id="camField" editable="false" prefHeight="25.0" prefWidth="200.0" />
+      </children>
+   </HBox>
    <HBox alignment="CENTER" prefHeight="39.0" prefWidth="449.0">
       <children>
          <Button fx:id="firstImgBtn" mnemonicParsing="false" onAction="#firstPic" text="&lt;&lt;" />

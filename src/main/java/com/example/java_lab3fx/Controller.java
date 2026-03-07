@@ -1,4 +1,8 @@
 package com.example.java_lab3fx;
+import com.drew.imaging.ImageMetadataReader;
+import com.drew.metadata.Metadata;
+import com.drew.metadata.exif.ExifIFD0Directory;
+import com.drew.metadata.exif.ExifSubIFDDirectory;
 import javafx.animation.*;
 import javafx.css.Size;
 import javafx.scene.control.CheckBox;
@@ -16,6 +20,7 @@ import javafx.scene.image.Image;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.util.concurrent.TimeUnit;
+
 
 
 public class Controller {
@@ -48,7 +53,10 @@ public class Controller {
 
         imageView.setImage((Image)iterator.getFirstPic());
 
+
        updateIndexField();
+
+       getExif();
 
     }
 
@@ -104,6 +112,7 @@ public class Controller {
         //imageView.setImage((Image) iterator.next());
         //imageView.opacityProperty().setValue(100);
         updateIndexField();
+        getExif();
     }
 
     @FXML
@@ -112,6 +121,7 @@ public class Controller {
         slidePrev((Image)iterator.preview());
         //imageView.setImage((Image)iterator.preview());
         updateIndexField();
+        getExif();
     }
 
     @FXML
@@ -120,6 +130,7 @@ public class Controller {
         sizeNext((Image)iterator.getFirstPic());
         //imageView.setImage((Image)iterator.getFirstPic());
         updateIndexField();
+        getExif();
     }
 
     @FXML
@@ -129,6 +140,7 @@ public class Controller {
         //slideNext((Image)iterator.getLastPic());
         //imageView.setImage((Image)iterator.getLastPic());
         updateIndexField();
+        getExif();
     }
 
 
@@ -244,16 +256,16 @@ public class Controller {
     @FXML
     public void autoScroll()
     {
-        // 1. Инициализируем один раз при первом нажатии
+
         if (pause == null) {
             pause = new PauseTransition(Duration.seconds(3));
             pause.setOnFinished(e -> {
                 nextPic();
-                pause.playFromStart(); // Зацикливаем
+                pause.playFromStart();
             });
         }
 
-        // 2. Логика вкл/выкл по состоянию анимации
+
         if (pause.getStatus() == Animation.Status.RUNNING) {
             pause.stop();
         } else {
@@ -262,6 +274,21 @@ public class Controller {
 
 
     }
+    @FXML
+    TextField dateField;
+    @FXML
+    TextField camField;
+
+    @FXML
+    public void getExif()
+    {
+        String date = iterator.metas[iterator.getCurrentIndex()][0];
+        String cam = iterator.metas[iterator.getCurrentIndex()][1];
+
+        dateField.setText(date);
+        camField.setText(cam);
+    }
+
 
 
 }

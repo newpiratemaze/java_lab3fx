@@ -1,5 +1,9 @@
 package org.example.works.slideshow;
 
+import com.drew.imaging.ImageMetadataReader;
+import com.drew.metadata.Metadata;
+import com.drew.metadata.exif.ExifIFD0Directory;
+import com.drew.metadata.exif.ExifSubIFDDirectory;
 import javafx.scene.image.Image;
 
 import java.io.File;
@@ -11,8 +15,9 @@ public class Iterator
 
 
     public Object[] items;
-    private int index = 0;
+    public int index = 0;
     ImageLoader imgLoader = new ImageLoader();
+    public String[][] metas;
 
 //    public Iterator(Object[] items) {
 //        this.items = items;
@@ -23,11 +28,68 @@ public class Iterator
         ImageCollection imgCol = new ImageCollection(dir,type);
         File[] files = imgCol.getFiles();
         items = new Object[files.length];
+        metas = new String[files.length][2];
         for (int i=0;i< files.length;i++)
         {
             Image img = imgLoader.loadFromFile(files[i]);
             items[i] = img;
+
+            try {
+                Metadata metadata = ImageMetadataReader.readMetadata(files[i]);
+
+
+//                ExifSubIFDDirectory dateDir = metadata.getFirstDirectoryOfType(ExifSubIFDDirectory.class);
+//                metas[i][0] = ("Дата: " + dateDir.getDate(ExifSubIFDDirectory.TAG_DATETIME_ORIGINAL));
+//
+//
+//
+//
+//
+//                ExifIFD0Directory cameraDir = metadata.getFirstDirectoryOfType(ExifIFD0Directory.class);
+//                metas[i][1]=("Камера: " + cameraDir.getString(ExifIFD0Directory.TAG_MODEL));
+
+
+                // Проверяем блок даты
+                // Извлекаем основные директории
+                ExifSubIFDDirectory subDir = metadata.getFirstDirectoryOfType(ExifSubIFDDirectory.class);
+                ExifIFD0Directory ifd0Dir = metadata.getFirstDirectoryOfType(ExifIFD0Directory.class);
+
+                // 1. Поиск даты (проверяем разные источники)
+                String dateValue = null;
+                if (subDir != null) {
+                    dateValue = subDir.getDescription(ExifSubIFDDirectory.TAG_DATETIME_ORIGINAL);
+                }
+                if (dateValue == null && ifd0Dir != null) {
+                    dateValue = ifd0Dir.getDescription(ExifIFD0Directory.TAG_DATETIME);
+                }
+
+                if (dateValue != null) {
+                    metas[i][0] = "Дата: " + dateValue;
+                } else {
+                    metas[i][0] = "Дата: нет данных";
+                }
+
+                // 2. Поиск модели камеры
+                String cameraValue = null;
+                if (ifd0Dir != null) {
+                    cameraValue = ifd0Dir.getDescription(ExifIFD0Directory.TAG_MODEL);
+                }
+
+                if (cameraValue != null) {
+                    metas[i][1] = "Камера: " + cameraValue;
+                } else {
+                    metas[i][1] = "Камера: неизвестна";
+                }
+
+            } catch (Exception e) {
+                //System.out.println("Метаданные не найдены");
+                e.printStackTrace();
+                metas[i][0] = "Дата: ошибка";
+                metas[i][1] = "Камера: ошибка";
+            }
         }
+
+        System.out.println(metas);
     }
 
 
