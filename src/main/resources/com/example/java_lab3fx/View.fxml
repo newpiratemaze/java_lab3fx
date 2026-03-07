@@ -7,11 +7,15 @@
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.VBox?>
 
-<VBox alignment="CENTER" prefHeight="600.0" prefWidth="750.0" spacing="20.0" xmlns="http://javafx.com/javafx/25" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.java_lab3fx.Controller">
+<VBox alignment="CENTER" prefHeight="669.0" prefWidth="750.0" spacing="20.0" xmlns="http://javafx.com/javafx/25" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.java_lab3fx.Controller">
     <padding>
         <Insets bottom="20.0" left="20.0" right="20.0" top="20.0" />
     </padding>
-   <ImageView fx:id="imageView" fitHeight="447.0" fitWidth="701.0" pickOnBounds="true" preserveRatio="true" />
+   <HBox alignment="CENTER">
+      <children>
+         <ImageView fx:id="imageView" fitHeight="442.0" fitWidth="710.0" pickOnBounds="true" preserveRatio="true" />
+      </children>
+   </HBox>
    <HBox alignment="CENTER" prefHeight="39.0" prefWidth="449.0">
       <children>
          <Button fx:id="firstImgBtn" mnemonicParsing="false" onAction="#firstPic" text="&lt;&lt;" />
@@ -21,5 +25,8 @@
          <Button fx:id="lastImgBtn" mnemonicParsing="false" onAction="#lastPic" text="&gt;&gt;" />
       </children>
    </HBox>
-   <Button fx:id="loadBtn" mnemonicParsing="false" onAction="#loadPhotos" prefHeight="25.0" prefWidth="168.0" text="Загрузить фотографии" />
+   <Button fx:id="autoBtn" mnemonicParsing="false" onAction="#autoScroll" text="Автопросмотр" />
+   <Button fx:id="loadBtn" mnemonicParsing="false" onAction="#loadPhotos" prefHeight="25.0" prefWidth="168.0" text="Загрузить все фотографии" />
+   <Button mnemonicParsing="false" onAction="#loadJPGPhotos" text="Загрузить jpg/jpeg фотографии" />
+   <Button mnemonicParsing="false" onAction="#loadPNGPhotos" text="Загрузить png фотографии" />
 </VBox>

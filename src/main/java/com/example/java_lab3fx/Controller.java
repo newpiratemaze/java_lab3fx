@@ -1,7 +1,11 @@
 package com.example.java_lab3fx;
+import javafx.animation.*;
 import javafx.css.Size;
+import javafx.scene.control.CheckBox;
 import javafx.scene.control.TextField;
 import javafx.scene.image.ImageView;
+import javafx.scene.layout.Pane;
+import javafx.util.Duration;
 import org.example.works.slideshow.*;
 
 import javafx.fxml.FXML;
@@ -11,7 +15,7 @@ import javafx.scene.image.Image;
 //import java.awt.Image;
 import java.awt.image.BufferedImage;
 import java.io.File;
-
+import java.util.concurrent.TimeUnit;
 
 
 public class Controller {
@@ -22,6 +26,8 @@ public class Controller {
     ImageView imageView = new ImageView();
     @FXML
     TextField indexField;
+    @FXML
+    Pane pane1;
     Iterator iterator = new Iterator();
 
     @FXML
@@ -33,7 +39,7 @@ public class Controller {
 //            Image img = imgLoader.loadFromFile(file);
 //            images[i] = img;
 //        }
-        iterator.loadImages();
+        iterator.loadImages("all");
 
         if(iterator.items.length==0)
         {
@@ -47,30 +53,81 @@ public class Controller {
     }
 
     @FXML
+    public void loadJPGPhotos()
+    {
+//        for (int i=0;i<8;i++)
+//        {
+//            File file = new File("D:\\projects\\Java\\Java_Labs\\lab3FX\\java_lab3fx\\src\\main\\java\\images\\"+(i+1)+".jpg");
+//            Image img = imgLoader.loadFromFile(file);
+//            images[i] = img;
+//        }
+        iterator.loadImages("jpg");
+
+        if(iterator.items.length==0)
+        {
+            indexField.setText("Пусто");
+        }
+
+        imageView.setImage((Image)iterator.getFirstPic());
+
+        updateIndexField();
+
+    }
+
+    @FXML
+    public void loadPNGPhotos()
+    {
+//        for (int i=0;i<8;i++)
+//        {
+//            File file = new File("D:\\projects\\Java\\Java_Labs\\lab3FX\\java_lab3fx\\src\\main\\java\\images\\"+(i+1)+".jpg");
+//            Image img = imgLoader.loadFromFile(file);
+//            images[i] = img;
+//        }
+        iterator.loadImages("png");
+
+        if(iterator.items.length==0)
+        {
+            indexField.setText("Пусто");
+        }
+
+        imageView.setImage((Image)iterator.getFirstPic());
+
+        updateIndexField();
+
+    }
+
+    @FXML
     public void nextPic()
     {
-        imageView.setImage((Image) iterator.next());
+        //imageView.imageProperty().wait(500);
+        slideNext((Image)iterator.next());
+        //imageView.setImage((Image) iterator.next());
+        //imageView.opacityProperty().setValue(100);
         updateIndexField();
     }
 
     @FXML
     public void prevPic()
     {
-        imageView.setImage((Image)iterator.preview());
+        slidePrev((Image)iterator.preview());
+        //imageView.setImage((Image)iterator.preview());
         updateIndexField();
     }
 
     @FXML
     public void firstPic()
     {
-        imageView.setImage((Image)iterator.getFirstPic());
+        sizeNext((Image)iterator.getFirstPic());
+        //imageView.setImage((Image)iterator.getFirstPic());
         updateIndexField();
     }
 
     @FXML
     public void lastPic()
     {
-        imageView.setImage((Image)iterator.getLastPic());
+        sizeNext((Image)iterator.getLastPic());
+        //slideNext((Image)iterator.getLastPic());
+        //imageView.setImage((Image)iterator.getLastPic());
         updateIndexField();
     }
 
@@ -81,6 +138,130 @@ public class Controller {
         indexField.setText((iterator.getCurrentIndex()+1)+" из "+iterator.items.length);
     }
 
+    public void slideNext(Image nextImage) {
+
+        ImageView nextView = new ImageView(nextImage);
+        nextView.setFitWidth(imageView.getFitWidth());
+        nextView.setFitHeight(imageView.getFitHeight());
+        nextView.setPreserveRatio(true);
+
+
+        nextView.setTranslateX(imageView.getFitWidth());
+        ((Pane)imageView.getParent()).getChildren().add(nextView);
+
+        double x = imageView.getX();
+        TranslateTransition out = new TranslateTransition(Duration.millis(1000), imageView);
+        out.setFromX(x+imageView.getFitWidth()/3.6);
+        out.setToX(x-1000);
+
+
+        TranslateTransition in = new TranslateTransition(Duration.millis(1000), nextView);
+        in.setFromX(x+1000);
+        in.setToX(x-nextView.getFitWidth()/3.7);
+
+
+        out.setOnFinished(e -> {
+            imageView.setImage(nextImage);
+            imageView.setTranslateX(0);
+            ((Pane)imageView.getParent()).getChildren().remove(nextView);
+        });
+
+        out.play();
+        in.play();
+    }
+
+
+    public void slidePrev(Image nextImage) {
+
+        ImageView nextView = new ImageView(nextImage);
+        nextView.setFitWidth(imageView.getFitWidth());
+        nextView.setFitHeight(imageView.getFitHeight());
+        nextView.setPreserveRatio(true);
+
+
+        nextView.setTranslateX(imageView.getFitWidth());
+        ((Pane)imageView.getParent()).getChildren().add(nextView);
+
+        double x = imageView.getX();
+        TranslateTransition out = new TranslateTransition(Duration.millis(1000), imageView);
+        out.setFromX(x+imageView.getFitWidth()/3.6);
+        out.setToX(x+1000);
+
+
+        TranslateTransition in = new TranslateTransition(Duration.millis(1000), nextView);
+        in.setFromX(x-1000);
+        in.setToX(x-nextView.getFitWidth()/3.7);
+
+
+        out.setOnFinished(e -> {
+            imageView.setImage(nextImage);
+            imageView.setTranslateX(0);
+            ((Pane)imageView.getParent()).getChildren().remove(nextView);
+        });
+
+        out.play();
+        in.play();
+    }
+
+
+
+    public void sizeNext(Image nextImage)
+    {
+        double width = imageView.getFitWidth();
+        double height = imageView.getFitHeight();
+
+        //TranslateTransition decrease = new TranslateTransition(Duration.millis(1000),imageView);
+
+        ScaleTransition decrease = new ScaleTransition(Duration.millis(1000),imageView);
+        decrease.setFromX(1.0);
+        decrease.setFromY(1.0);
+        decrease.setToX(0.0);
+        decrease.setToY(0.0);
+
+
+        decrease.setOnFinished(e -> {
+            imageView.setImage(nextImage);
+            imageView.setScaleX(0.0);
+            imageView.setScaleY(0.0);
+        });
+
+
+        ScaleTransition grow = new ScaleTransition(Duration.millis(1000), imageView);
+        grow.setFromX(0.0);
+        grow.setFromY(0.0);
+        grow.setToX(1.0);
+        grow.setToY(1.0);
+
+        SequentialTransition sequentialTransition = new SequentialTransition(decrease, grow);
+        sequentialTransition.play();
+    }
+
+
+
+    boolean auto = false;
+    PauseTransition pause;
+
+    @FXML
+    public void autoScroll()
+    {
+        // 1. Инициализируем один раз при первом нажатии
+        if (pause == null) {
+            pause = new PauseTransition(Duration.seconds(3));
+            pause.setOnFinished(e -> {
+                nextPic();
+                pause.playFromStart(); // Зацикливаем
+            });
+        }
+
+        // 2. Логика вкл/выкл по состоянию анимации
+        if (pause.getStatus() == Animation.Status.RUNNING) {
+            pause.stop();
+        } else {
+            pause.play();
+        }
+
+
+    }
 
 
 }

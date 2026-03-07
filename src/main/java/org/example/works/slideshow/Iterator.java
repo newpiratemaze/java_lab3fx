@@ -8,7 +8,7 @@ public class Iterator
 {
     File dir = new File("D:\\projects\\Java\\Java_Labs\\lab3FX" +
             "\\java_lab3fx\\src\\main\\java\\images");
-    ImageCollection imgCol = new ImageCollection(dir);
+
 
     public Object[] items;
     private int index = 0;
@@ -18,8 +18,9 @@ public class Iterator
 //        this.items = items;
 //    }
 
-    public void loadImages()
+    public void loadImages(String type)
     {
+        ImageCollection imgCol = new ImageCollection(dir,type);
         File[] files = imgCol.getFiles();
         items = new Object[files.length];
         for (int i=0;i< files.length;i++)
@@ -28,6 +29,9 @@ public class Iterator
             items[i] = img;
         }
     }
+
+
+
 
     public boolean hasNext() {
         if(items!=null && index<items.length)
@@ -78,6 +82,9 @@ public class Iterator
         index=0;
         return items[0];
     }
+
+
+
 
 
 }
