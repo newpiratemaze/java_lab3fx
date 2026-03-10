@@ -7,6 +7,7 @@ import com.drew.metadata.exif.ExifSubIFDDirectory;
 import javafx.scene.image.Image;
 
 import java.io.File;
+import java.util.Date;
 
 public class Iterator
 {
@@ -40,10 +41,6 @@ public class Iterator
 
 //                ExifSubIFDDirectory dateDir = metadata.getFirstDirectoryOfType(ExifSubIFDDirectory.class);
 //                metas[i][0] = ("Дата: " + dateDir.getDate(ExifSubIFDDirectory.TAG_DATETIME_ORIGINAL));
-//
-//
-//
-//
 //
 //                ExifIFD0Directory cameraDir = metadata.getFirstDirectoryOfType(ExifIFD0Directory.class);
 //                metas[i][1]=("Камера: " + cameraDir.getString(ExifIFD0Directory.TAG_MODEL));
@@ -80,6 +77,13 @@ public class Iterator
                     metas[i][1] = "Камера: неизвестна";
                 }
 
+
+
+
+
+
+
+
             } catch (Exception e) {
                 //System.out.println("Метаданные не найдены");
                 e.printStackTrace();
@@ -89,6 +93,10 @@ public class Iterator
         }
 
         System.out.println(metas);
+        for(int i=0;i<metas.length;i++)
+        {
+            System.out.println(metas[i][0]+" "+ metas[i][1]);
+        }
     }
 
 

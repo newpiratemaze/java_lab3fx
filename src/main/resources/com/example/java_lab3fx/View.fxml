@@ -26,7 +26,7 @@
       <children>
          <Button fx:id="firstImgBtn" mnemonicParsing="false" onAction="#firstPic" text="&lt;&lt;" />
          <Button fx:id="prevImgBtn" mnemonicParsing="false" onAction="#prevPic" text="&lt;" />
-         <TextField fx:id="indexField" editable="false" prefHeight="25.0" prefWidth="51.0" />
+         <TextField fx:id="indexField" editable="false" prefHeight="25.0" prefWidth="102.0" />
          <Button fx:id="nextImgBtn" mnemonicParsing="false" onAction="#nextPic" text="&gt;" />
          <Button fx:id="lastImgBtn" mnemonicParsing="false" onAction="#lastPic" text="&gt;&gt;" />
       </children>
