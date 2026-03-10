@@ -49,12 +49,11 @@ public class Iterator
 //                metas[i][1]=("Камера: " + cameraDir.getString(ExifIFD0Directory.TAG_MODEL));
 
 
-                // Проверяем блок даты
-                // Извлекаем основные директории
+
                 ExifSubIFDDirectory subDir = metadata.getFirstDirectoryOfType(ExifSubIFDDirectory.class);
                 ExifIFD0Directory ifd0Dir = metadata.getFirstDirectoryOfType(ExifIFD0Directory.class);
 
-                // 1. Поиск даты (проверяем разные источники)
+
                 String dateValue = null;
                 if (subDir != null) {
                     dateValue = subDir.getDescription(ExifSubIFDDirectory.TAG_DATETIME_ORIGINAL);
@@ -69,7 +68,7 @@ public class Iterator
                     metas[i][0] = "Дата: нет данных";
                 }
 
-                // 2. Поиск модели камеры
+
                 String cameraValue = null;
                 if (ifd0Dir != null) {
                     cameraValue = ifd0Dir.getDescription(ExifIFD0Directory.TAG_MODEL);
